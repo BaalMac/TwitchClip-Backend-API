@@ -10,5 +10,8 @@ Plans:
 
 ONCE THE MAIN FUNCTION IS COMPLETE - ENGAGE ZERO TRUST INPUT - CLEAN/VALIDATE ALL INPUTS 
 '''
-
+import requests
 from config import Config
+
+def example():
+    return Config.TWITCH_CLIENT_ID
