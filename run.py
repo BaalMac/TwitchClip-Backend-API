@@ -1,9 +1,13 @@
 # starts the program
 
 from dbot.app import example
-from app import MainApp
+from twitch import clips, auth
+from logger import logger
 
 #print(example())
 #link is a twitch Clip as a placeholder for now
 link = 'https://www.twitch.tv/lucypyre/clip/BigAgitatedRadishRickroll-ZGx1a1Y5-oXkypwj'
-print(MainApp.GrabInfo(link))
+if __name__ == '__main__':
+    logger.info('Starting up...')
+    #print(clips.GrabInfo(link))
+    print(auth.get_twitch_token())
