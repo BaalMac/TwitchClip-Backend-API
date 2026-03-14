@@ -17,4 +17,5 @@ class Config:
 
     TWITCH_CLIENT_ID = os.getenv('TWITCH_CLIENT_ID')
     TWITCH_CLIENT_SECRET = os.getenv('TWITCH_CLIENT_SECRET')
- 
+    TWITCH_TOKEN = os.getenv('TWITCH_TOKEN')
+    TWITCH_TOKEN_TYPE = os.getenv('TWITCH_TOKEN_TYPE')
