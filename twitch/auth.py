@@ -8,4 +8,4 @@ def get_twitch_token():
         'grant_type': 'client_credentials'
     })
     return r.json()
-
+    # instead of returning to JSON it should update the database but the token should be encrypted

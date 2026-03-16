@@ -19,3 +19,5 @@ class Config:
     TWITCH_CLIENT_SECRET = os.getenv('TWITCH_CLIENT_SECRET')
     TWITCH_TOKEN = os.getenv('TWITCH_TOKEN')
     TWITCH_TOKEN_TYPE = os.getenv('TWITCH_TOKEN_TYPE')
+
+    ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY')

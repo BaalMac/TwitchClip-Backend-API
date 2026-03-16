@@ -3,7 +3,10 @@ from config import Config
 from logger import logger
 from twitch.mockup import requestURL_MOCK
 
+
 Authentication = {
+    # [FUTURE IMPLIMENTATION]
+    # Probably for future feature since im also checking my twitch token validity and expiration in database. It should prbably call for the database instead
     'Authorization': f'Bearer {Config.TWITCH_TOKEN}', 
     'Client-Id': Config.TWITCH_CLIENT_ID
 }
@@ -43,8 +46,11 @@ def requestURL(link):
         return None
  
 def GrabInfo(link):
+    
+    # Change values of data 
     #data = requestURL(link)
-    data = requestURL_MOCK(1)
+    data = requestURL_MOCK(0)
+
     if 'error' in data:
         return "Something went wrong with the TwitchAPI! Check Logs"
     else:
