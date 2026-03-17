@@ -21,3 +21,4 @@ class TwitchToken(Base):
     access_token = Column(Text, nullable=False)
     expires_at = Column(DateTime, nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    

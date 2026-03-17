@@ -1,7 +1,6 @@
 from logger import logger
 def requestURL_MOCK(link):
     if link == 0:
-        logger.info('[200] Clip: BigAgitatedRadishRickroll-ZGx1a1Y5-oXkypwj | Remaining: 6969 | Reset: idk')
         return {
             'data': [
                 {
@@ -24,7 +23,7 @@ def requestURL_MOCK(link):
                     'is_featured': False
                 }], 'pagination': {}
                 }
+
     else:
-        #This should return in the event that the PythonAPI DOES interact with TwitchAPI but throws an error
-        logger.warning("[401] Token is expired, renewing...")
-        return {'error': 'Unauthorized', 'status': 401, 'message': 'OAuth token is missing'}
+        status = 69
+        return {"Error": status}
