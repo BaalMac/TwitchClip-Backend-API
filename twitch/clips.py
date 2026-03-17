@@ -4,7 +4,7 @@ from logger import logger
 from twitch import auth, tokenCrypt
 from database.connection import Session
 from database.models import TwitchToken, Clip
-from sqlalchemy import select
+from sqlalchemy import select, func
 from datetime import datetime, timezone
 
 #TESTSITE
@@ -204,5 +204,56 @@ def RemoveClip(clip_link: str):
         logger.error(f'The API shit the Bed (Specifically at RemoveClip Function): {e}')
         return {'success': False, 'error': str(e)}
 
+    finally:
+        session.close()
+
+def GetClips(limit: int = 10, offset: int = 0):
+    session = Session()
+    try:
+        total_count = session.execute(select(func.count()).select_from(Clip)).scalar()
+
+        clips = session.execute(
+            select(Clip)
+            .order_by(Clip.created_at.desc())
+            .limit(limit)
+            .offset(offset)
+        ).scalars().all()
+
+        if not clips:
+            logger.info(f'No Clips found at offset {offset}')
+            return {
+                'success': True,
+                'clips': [],
+                'total': total_count,
+                'limit': limit,
+                'offset': offset,
+                'has_more': False
+            }
+        parsed_clips = []
+        for clip in clips:
+            parsed_clips.append({
+                'id': clip.id,
+                'url': clip.url,
+                'embed_url': clip.embed_url,
+                'created_at': clip.created_at.isoformat(),
+                'fetched_at': clip.fetched_at.isoformat() if clip.fetched_at else None,
+                'vod_id': clip.vod_id,
+                'vod_offset': clip.vod_offset
+            })
+        has_more = (offset + limit) < total_count
+        logger.info(f'Returned {len(parsed_clips)} clips | offset: {offset} | total: {total_count}')
+        return {
+            'success': True,
+            'clips': parsed_clips,
+            'total': total_count,
+            'limit': limit,
+            'offset': offset,
+            'has_more': has_more
+        }
+
+    except Exception as e:
+        logger.error(f"The API shit the Bed (Specifically at GetClips Function): {e}")
+        return {'success': False, 'error': str(e)}
+    
     finally:
         session.close()
