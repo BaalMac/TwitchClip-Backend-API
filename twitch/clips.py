@@ -34,8 +34,6 @@ def requestURL(link: str):
                 logger.warning(f"[{status}] Approaching rate limit - only {remaining} requests left")
             return r.json()
 
-        #Deleted elif status == 401 statement because its already being checked by calling auth.get_twitch_token during tToken
-
         elif status == 404:
             logger.error(f'[{status}] Clip not found')
             return {"Error": status}
@@ -56,8 +54,6 @@ def requestURL(link: str):
  
     finally:
         session.close()
-
- # Deleted GrabInfo() becasue its just a middle man for SaveClip 
 
 def SaveClip(link: str):
     session = Session()
