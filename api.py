@@ -52,6 +52,3 @@ def remove_server_header(response):
     response.headers.pop('X-Powered-By', None)
     return response
 
-if __name__ == '__main__':
-    logger.info(f"Starting Flask on 0.0.0.0:{Config.API_PORT}")
-    app.run(host='0.0.0.0', port=Config.API_PORT, debug=False)

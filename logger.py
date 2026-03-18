@@ -14,7 +14,7 @@ def setup_logger():
     )
 
     # Log to file
-    file_handler = logging.FileHandler(f'logs/PythonAPI.log')
+    file_handler = logging.FileHandler('logs/PythonAPI.log')
     file_handler.setFormatter(formatter)
 
     logger.addHandler(file_handler)
