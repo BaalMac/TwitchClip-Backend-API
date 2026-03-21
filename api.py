@@ -1,7 +1,8 @@
 from flask import Flask, jsonify, request
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from twitch.clips import GetClips
+from twitch.clips import GetClips, SaveClip, UpdateClip, RemoveClip, UpdateVodData
+from functools import wraps
 from config import Config
 from logger import logger
 import logging
@@ -24,12 +25,66 @@ limiter = Limiter(
     storage_uri='memory://'
 )
 
+def require_api_key(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        key = request.headers.get('X-API-Key')
+
+        if not key:
+            logger.warning(f'Rejected request to {request.path} — no API key provided')
+            return jsonify({'success': False, 'error': 'API key required'}), 401
+
+        if key != Config.DISCORD_API_KEY:
+            logger.warning(f'Rejected request to {request.path} — invalid API key')
+            return jsonify({'success': False, 'error': 'Invalid API key'}), 403
+
+        return f(*args, **kwargs)
+    return decorated
+
+# -------------------------------------------------------
+# PUBLIC — no API key needed
+# Website calls this for infinite scrolling
+# -------------------------------------------------------
+
 @app.route('/clips', methods=['GET'])
 @limiter.limit('30 per minute')
 def get_clips():
-    limit = request.args.get('limit', 10, type = int)
+    limit = request.args.get('limit', 6, type = int)
     offset = request.args.get('offset', 0, type = int)
     result = GetClips(limit, offset)
+    return jsonify(result)
+
+# -------------------------------------------------------
+# PRIVATE — API key required
+# Only your Discord bot can call these
+# -------------------------------------------------------
+@app.route('/clips', methods=['POST'])
+@limiter.limit('20 per minute')
+@require_api_key
+def save_clip():
+    data   = request.get_json()
+    link   = data.get('link')
+    result = SaveClip(link)
+    return jsonify(result)
+
+@app.route('/clips/vod/update', methods=['POST'])
+@require_api_key
+def update_vod_data():
+    UpdateVodData()
+    return jsonify({'success': True, 'message': 'Vod data update triggered'})
+
+@app.route('/clips/<clip_id>', methods=['PUT'])
+@require_api_key
+def update_clip(clip_id):
+    data     = request.get_json()
+    new_link = data.get('link')
+    result   = UpdateClip(clip_id, new_link)
+    return jsonify(result)
+
+@app.route('/clips/<clip_id>', methods=['DELETE'])
+@require_api_key
+def remove_clip(clip_id):
+    result = RemoveClip(clip_id)
     return jsonify(result)
 
 @app.errorhandler(429)

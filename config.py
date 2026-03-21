@@ -7,6 +7,8 @@ class Config:
 
     DATABASE_URL = os.getenv('DATABASE_URL')
 
+    DISCORD_API_KEY = os.getenv('DISCORD_API_KEY')
+
     TWITCH_CLIENT_ID = os.getenv('TWITCH_CLIENT_ID')
     TWITCH_CLIENT_SECRET = os.getenv('TWITCH_CLIENT_SECRET')
 

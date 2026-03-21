@@ -8,6 +8,7 @@ class Clip(Base):
     id = Column(String(255), primary_key=True)
     url = Column(Text, nullable=False)
     embed_url = Column(Text, nullable=False)
+    title = Column(Text, nullable = False)
     created_at = Column(DateTime, nullable=False)
     fetched_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 

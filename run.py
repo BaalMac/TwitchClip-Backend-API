@@ -24,7 +24,7 @@ if __name__ == '__main__':
             '--timeout',    '30',         # Kill workers that take longer than 30s
             '--access-logfile', 'logs/gunicorn_access.log',
             '--error-logfile',  'logs/gunicorn_error.log',
-            '--log-level',  'info',
+            '--log-level',  'debug',
             'api:app'                     # module:flask_app_variable
         ])
     except KeyboardInterrupt:

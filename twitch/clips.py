@@ -61,27 +61,28 @@ def SaveClip(link: str):
         data = requestURL(link)
 
         if data.get("Error") is not None:
-            return {'Success': False, 'error': f"Error Code: {data["Error"]} Check Logs"}
+            return {'success': False, 'error': f"Error Code: {data['Error']} Check Logs"}
         
         clip_data = data['data'][0]
         existing = session.execute(select(Clip).where(Clip.id == clip_data['id'])).scalars().first()
 
         if existing:
-            logger.info(f"Clip ID: {clip_data["id"]} already exists in the Database - Skipping")
-            return {'Success': False, 'error': "Clip already Exists"}
+            logger.info(f"Clip ID: {clip_data['id']} already exists in the Database - Skipping")
+            return {'success': False, 'error': "Clip already Exists"}
 
         clip = Clip(
             id = clip_data["id"],
             url = clip_data["url"],
             embed_url = clip_data["embed_url"],
-            created_at = clip_data["created_at"],
+            title = clip_data.get("title"),
+            created_at = datetime.fromisoformat(clip_data["created_at"].replace('Z', '+00:00')),
             vod_id = clip_data.get("vod_id"),
             vod_offset = clip_data.get("vod_offset")
         )
         
         session.add(clip)
         session.commit()
-        logger.info(f"Clip {clip_data["id"]} saved successfully!")
+        logger.info(f"Clip {clip_data['id']} saved successfully!")
 
         if clip_data.get('vod_id') is None or clip_data.get('vod_offset') is None:
             logger.warning(f'Clip {clip_data["id"]} saved but vod data is null — PythonAPI will retry later')
@@ -156,6 +157,7 @@ def UpdateClip(clip_link: str, new_link: str):
         existing.id = clip_data['id']
         existing.url = clip_data['url']
         existing.embed_url = clip_data['embed_url']
+        existing.title = clip_data.get("title")
         existing.created_at = clip_data['created_at']
         existing.vod_id = clip_data.get('vod_id')
         existing.vod_offset = clip_data.get('vod_offset')
@@ -203,7 +205,7 @@ def RemoveClip(clip_link: str):
     finally:
         session.close()
 
-def GetClips(limit: int = 10, offset: int = 0):
+def GetClips(limit: int = 6, offset: int = 0):
     session = Session()
     try:
         total_count = session.execute(select(func.count()).select_from(Clip)).scalar()
@@ -231,7 +233,8 @@ def GetClips(limit: int = 10, offset: int = 0):
                 'id': clip.id,
                 'url': clip.url,
                 'embed_url': clip.embed_url,
-                'created_at': clip.created_at.isoformat(),
+                'title': clip.title,
+                'created_at': clip.created_at.isoformat() if clip.created_at else None,
                 'fetched_at': clip.fetched_at.isoformat() if clip.fetched_at else None,
                 'vod_id': clip.vod_id,
                 'vod_offset': clip.vod_offset
