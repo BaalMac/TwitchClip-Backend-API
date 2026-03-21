@@ -87,7 +87,7 @@ def SaveClip(link: str):
 
         if clip_data.get('vod_id') is None or clip_data.get('vod_offset') is None:
             logger.warning(f'Clip {clip_data["id"]} saved but vod data is null — PythonAPI will retry later')
-            return {'success': True, 'vod_pending': True, 'clip_id': clip_data['id']}
+            return {'success': True, 'vod_pending': True, 'clip_id': clip_data['id'], 'clip_title': clip_data['title'], 'thumbnail_url': clip_data['thumbnail_url']}
 
         return {'success': True, 'vod_pending': False, 'clip_id': clip_data['id']}
 
