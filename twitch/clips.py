@@ -74,6 +74,7 @@ def SaveClip(link: str):
             id = clip_data["id"],
             url = clip_data["url"],
             embed_url = clip_data["embed_url"],
+            thumbnail_url = clip_data["thumbnail_url"],
             title = clip_data.get("title"),
             created_at = datetime.fromisoformat(clip_data["created_at"].replace('Z', '+00:00')),
             vod_id = clip_data.get("vod_id"),
@@ -158,6 +159,7 @@ def UpdateClip(clip_link: str, new_link: str):
         existing.url = clip_data['url']
         existing.embed_url = clip_data['embed_url']
         existing.title = clip_data.get("title")
+        existing.thumbnail_url = clip_data["thumbnail_url"]
         existing.created_at = clip_data['created_at']
         existing.vod_id = clip_data.get('vod_id')
         existing.vod_offset = clip_data.get('vod_offset')
@@ -234,6 +236,7 @@ def GetClips(limit: int = 6, offset: int = 0):
                 'url': clip.url,
                 'embed_url': clip.embed_url,
                 'title': clip.title,
+                'thumbnail_url': clip.thumbnail_url,
                 'created_at': clip.created_at.isoformat() if clip.created_at else None,
                 'fetched_at': clip.fetched_at.isoformat() if clip.fetched_at else None,
                 'vod_id': clip.vod_id,

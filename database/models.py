@@ -9,6 +9,7 @@ class Clip(Base):
     url = Column(Text, nullable=False)
     embed_url = Column(Text, nullable=False)
     title = Column(Text, nullable = False)
+    thumbnail_url = Column(Text, nullable=False)
     created_at = Column(DateTime, nullable=False)
     fetched_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
