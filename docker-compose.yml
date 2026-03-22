@@ -1,0 +1,6 @@
+services:
+  twitchbot-api:
+    build: .
+    env_file: .env
+    volumes:
+      - ./logs:/TwitchClip-Backend-API/logs
