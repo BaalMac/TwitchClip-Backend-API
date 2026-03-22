@@ -13,3 +13,6 @@ class Config:
     TWITCH_CLIENT_SECRET = os.getenv('TWITCH_CLIENT_SECRET')
 
     ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY')
+
+    CLOUDFLARE_PAGES_URL = os.getenv("CLOUDFLARE_PAGES_URL")
+    CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")
