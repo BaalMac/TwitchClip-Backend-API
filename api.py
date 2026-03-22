@@ -14,8 +14,8 @@ CORS(app, resources={
         "origins": [
             Config.CUSTOM_DOMAIN,      # your custom domain
             Config.CLOUDFLARE_PAGES_URL,       # Cloudflare Pages
-            "http://localhost:5500",             # local dev
-            "http://127.0.0.1:5500",             # local dev fallback
+            f"http://localhost:{Config.API_PORT}",             # local dev
+            f"http://127.0.0.1:{Config.API_PORT}",             # local dev fallback
         ],
         "methods": ["GET", "OPTIONS"],
         "allow_headers": ["Content-Type"]
