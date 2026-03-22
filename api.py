@@ -43,7 +43,7 @@ def require_api_key(f):
     def decorated(*args, **kwargs):
         key = request.headers.get('X-API-Key')
 
-        if not key: or key != Config.DISCORD_API_KEY:
+        if not key or key != Config.DISCORD_API_KEY:
             logger.warning(f'Rejected request to {request.path}')
             return jsonify({"error": "Unauthorized"}), 401
 
