@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_cors import CORS
 from twitch.clips import GetClips, SaveClip, UpdateClip, RemoveClip, UpdateVodData
 from functools import wraps
 from config import Config
@@ -8,6 +9,16 @@ from logger import logger
 import logging
 
 app = Flask(__name__)
+CORS(app, resources={
+    r"/*": {
+        "origins": [
+            "https://your-site.pages.dev",      # Cloudflare Pages domain
+            "http://localhost:5000"             # LocalHost
+        ],
+        "methods": ["GET"],
+        "allow_headers": ["Content-Type"]
+    }
+})
 
 # Trust Cloudflare's forwarded IP header
 from wsgi_cloudflare_proxy_fix import CloudflareProxyFix
