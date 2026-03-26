@@ -9,13 +9,12 @@ from logger import logger
 import logging
 
 app = Flask(__name__)
-CORS(app, resources={
+CORS(app , resources={
     r"/*": {
         "origins": [
-            Config.CUSTOM_DOMAIN,      # your custom domain
-            Config.CLOUDFLARE_PAGES_URL,       # Cloudflare Pages
-            f"http://localhost:{Config.API_PORT}",             # local dev
-            f"http://127.0.0.1:{Config.API_PORT}",             # local dev fallback
+            str(Config.CUSTOM_DOMAIN),      # your custom domain
+            str(Config.CLOUDFLARE_PAGES_URL),       # Cloudflare Pages
+            f"http://localhost:{Config.API_PORT}"             # local dev
         ],
         "methods": ["GET", "OPTIONS"],
         "allow_headers": ["Content-Type"]
