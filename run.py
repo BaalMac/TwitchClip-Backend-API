@@ -15,7 +15,7 @@ if __name__ == '__main__':
         subprocess.run([
             'gunicorn',
             '--workers',    '4',          # 4 worker processes
-            '--bind',       '0.0.0.0:5000',
+            '--bind',       f'0.0.0.0:{Config.API_PORT}',
             '--timeout',    '30',         # Kill workers that take longer than 30s
             '--access-logfile', 'logs/gunicorn_access.log',
             '--error-logfile',  'logs/gunicorn_error.log',

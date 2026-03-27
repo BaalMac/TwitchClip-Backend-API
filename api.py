@@ -9,13 +9,15 @@ from logger import logger
 import logging
 
 app = Flask(__name__)
-CORS(app, resources={
+CORS(app , resources={
     r"/*": {
         "origins": [
-            "https://your-site.pages.dev",      # Cloudflare Pages domain
-            "http://localhost:5000"             # LocalHost
+            str(Config.CUSTOM_DOMAIN),      # your custom domain
+            str(Config.CLOUDFLARE_PAGES_URL),       # Cloudflare Pages
+            str(Config.CLOUDFLARE_TUNNEL),
+            str(Config.INTERNAL_IP),   
         ],
-        "methods": ["GET"],
+        "methods": ["GET", "OPTIONS"],
         "allow_headers": ["Content-Type"]
     }
 })
@@ -41,13 +43,9 @@ def require_api_key(f):
     def decorated(*args, **kwargs):
         key = request.headers.get('X-API-Key')
 
-        if not key:
-            logger.warning(f'Rejected request to {request.path} — no API key provided')
-            return jsonify({'success': False, 'error': 'API key required'}), 401
-
-        if key != Config.DISCORD_API_KEY:
-            logger.warning(f'Rejected request to {request.path} — invalid API key')
-            return jsonify({'success': False, 'error': 'Invalid API key'}), 403
+        if not key or key != Config.DISCORD_API_KEY:
+            logger.warning(f'Rejected request to {request.path}')
+            return jsonify({"error": "Unauthorized"}), 401
 
         return f(*args, **kwargs)
     return decorated
