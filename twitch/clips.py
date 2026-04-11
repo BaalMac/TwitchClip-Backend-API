@@ -160,7 +160,7 @@ def UpdateClip(clip_link: str, new_link: str):
         existing.embed_url = clip_data['embed_url']
         existing.title = clip_data.get("title")
         existing.thumbnail_url = clip_data["thumbnail_url"]
-        existing.created_at = clip_data['created_at']
+        existing.created_at = datetime.fromisoformat(clip_data["created_at"].replace('Z', '+00:00'))
         existing.vod_id = clip_data.get('vod_id')
         existing.vod_offset = clip_data.get('vod_offset')
         existing.fetched_at = datetime.now(timezone.utc)
